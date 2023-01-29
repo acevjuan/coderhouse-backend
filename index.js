@@ -1,30 +1,51 @@
 // Creando clase ProductManager.
 class ProductManager {
+  #fileSystem;
+  #path;
+  #file;
+  #productsListFile;
   // El constructor genera un arreglo vacío.
   constructor() {
     this.product = [];
+    this.#fileSystem = require('fs');
+    this.#path = './files';
+    this.#file = this.#path + '/products.json';
+    this.#productsListFile = new Array();
   };
   
   // Agrega un producto a arreglo de productos. Valida que no existan productos repetidos y que todos los campos sean obligatorios. Igualmente, genera un id autoincrementable para cada nuevo producto agregado.
-  addProduct(title, description, price, thumbnail, code, stock) {
+  async addProduct(title, description, price, thumbnail, code, stock) {
     // Validación de que todos los campos sean diligenciados.
     if (title === "" || description === "" || price === "" || thumbnail === "" || code === "" || stock === "") {
       console.log("Not enough information to create a new product.");
     } else {
+      let newProduct;
       // Validación de que no existan propiedades "code" iguales.
       // Verificación de que el arreglo ya cuente con productos agregados y que se realice la verificación de "code".
       if (!this.product.length == 0) {
         const codeToCompare = this.product.find(element => element.code === code);
         if (!codeToCompare) {
           // Crea y agrega nuevo producto al arreglo.
-          this.product.push({id: this.product.length + 1, title, description, price, thumbnail, code, stock});
+          newProduct = {id: this.product.length + 1, title, description, price, thumbnail, code, stock}
+          this.product.push(newProduct);
         } else {
           // En caso de que ya exista el mismo "code", notificará al usuario del error y detendrá la creación de nuevo producto.
           console.log("Error. There is already a product with the same code.");
         };
       } else {
-        this.product.push({id: this.product.length + 1, title, description, price, thumbnail, code, stock});
+        newProduct = {id: this.product.length + 1, title, description, price, thumbnail, code, stock}
+        this.product.push(newProduct);
       };
+      try {
+        await this.#fileSystem.promises.mkdir(this.#path, { recursive: true });
+        await this.#fileSystem.promises.writeFile(this.#file, "[]");
+        let productsFile = await this.#fileSystem.promises.readFile(this.#file, 'utf-8');
+        this.#productsListFile = JSON.parse(productsFile);
+        this.#productsListFile.push(...this.product);
+        await this.#fileSystem.promises.writeFile(this.#file, JSON.stringify(this.#productsListFile));
+      } catch(error) {
+        console.log(error);
+      }
     };
   };
   
@@ -72,7 +93,6 @@ class ProductManager {
     this.product.splice(id - 1, 1);
     console.log(`Product with id number ${id} was succesfully deleted.`);
   };
-
 };
 
 // Testing
@@ -97,16 +117,18 @@ console.log(productList);
 testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc456", 25);
 testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc789", 25);
 testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "def123", 25);
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "def456", 25);
 console.log(productList);
 
 // Probando método getProductById
 let productById;
 // En caso de no existir el id
 productById = testingProduct.getProductById(2);
-console.log(productById);
 // En caso de existir el id
 productById = testingProduct.getProductById(1);
 
-testingProduct.updateProduct(1, 'cod', "123456789");
+testingProduct.updateProduct(1, 'title', "123456789");
+testingProduct.updateProduct(5, 'stock', 40);
 testingProduct.deleteProduct(4);
+testingProduct.deleteProduct(2);
 console.log(productList);
