@@ -55,11 +55,15 @@ class ProductManager {
 
   // Actualiza información del producto indicada por el usuario proporcionando el id.
   updateProduct(id, toUpdate, newValue) {
-    if (toUpdate === 'title' || toUpdate === 'description' || toUpdate === 'price' || toUpdate === 'thumbnail' || toUpdate === 'code' || toUpdate === 'stock') {
+    if (toUpdate === 'title' || toUpdate === 'description' || toUpdate === 'price' || toUpdate === 'thumbnail' || toUpdate === 'stock') {
       this.product[id - 1][toUpdate] = newValue;
       console.log("Info was succesfully updated.");
     } else {
-      console.log("Info to update do not exist.");
+      if (toUpdate === 'code') {
+        console.log("Code can't be updated.");
+      } else {
+        console.log("Info to update do not exist.");
+      }
     };
   };
 
@@ -103,6 +107,6 @@ console.log(productById);
 // En caso de existir el id
 productById = testingProduct.getProductById(1);
 
-testingProduct.updateProduct(1, 'description', "123456789");
+testingProduct.updateProduct(1, 'cod', "123456789");
 testingProduct.deleteProduct(4);
 console.log(productList);
