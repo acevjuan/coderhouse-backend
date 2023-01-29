@@ -36,16 +36,21 @@ class ProductManager {
         newProduct = {id: this.product.length + 1, title, description, price, thumbnail, code, stock}
         this.product.push(newProduct);
       };
+      // Interactuar con base de datos en json.
       try {
+        // Crea directorio de archivos en caso de no existir.
         await this.#fileSystem.promises.mkdir(this.#path, { recursive: true });
+        // Crea archivo json en caso que no exista + Sobreescribe información para actualizar base de datos cuando existan cambios en el arreglo del producto.
         await this.#fileSystem.promises.writeFile(this.#file, "[]");
         let productsFile = await this.#fileSystem.promises.readFile(this.#file, 'utf-8');
         this.#productsListFile = JSON.parse(productsFile);
         this.#productsListFile.push(...this.product);
+        // Sobreescribe archivo json con información actualizada en arreglo de productos.
         await this.#fileSystem.promises.writeFile(this.#file, JSON.stringify(this.#productsListFile));
+        // Atraba errores durante promesas.
       } catch(error) {
         console.log(error);
-      }
+      };
     };
   };
   
@@ -76,22 +81,52 @@ class ProductManager {
 
   // Actualiza información del producto indicada por el usuario proporcionando el id.
   updateProduct(id, toUpdate, newValue) {
-    if (toUpdate === 'title' || toUpdate === 'description' || toUpdate === 'price' || toUpdate === 'thumbnail' || toUpdate === 'stock') {
-      this.product[id - 1][toUpdate] = newValue;
-      console.log("Info was succesfully updated.");
+    // Validación de que existan productos agregados. En caso que no, notificará al usuario.
+    if (this.product.length === 0) {
+      console.log("List is empty. Can't update any product.");
     } else {
-      if (toUpdate === 'code') {
-        console.log("Code can't be updated.");
+      // Procede a buscar el id suministrado por el usuario.
+      const idToFind = this.product.find(element => element.id === id);
+      // Si el id suministrado por el usuario existe, procederá a ejecutar la actualización de información.
+      if (idToFind) {
+        // Verifica que la información que desea modificar el usuario se válida, es decir, que la propiedad exista.
+        if (toUpdate === 'title' || toUpdate === 'description' || toUpdate === 'price' || toUpdate === 'thumbnail' || toUpdate === 'stock') {
+          // Actualiza información requerida por el usuario.
+          this.product[id - 1][toUpdate] = newValue;
+          console.log("Info was succesfully updated.");
+        } else {
+          // Impide modificación de code.
+          if (toUpdate === 'code') {
+            console.log("Code can't be updated.");
+          } else {
+            console.log("Info to update does not exist.");
+          };
+        };
       } else {
-        console.log("Info to update do not exist.");
-      }
+        // Si no existe el arreglo, se notificará al usuario por medio de un error.
+        console.log(`There is no product with id ${id}`);
+      };
     };
   };
 
     // Elimina un producto del arreglo indicado por el usuario proporcionando el id.
   deleteProduct(id) {
-    this.product.splice(id - 1, 1);
-    console.log(`Product with id number ${id} was succesfully deleted.`);
+    // Validación de que existan productos agregados. En caso que no, notificará al usuario.
+    if (this.product.length === 0) {
+      console.log("List is empty. Can't delete any product.");
+    } else {
+      // Procede a buscar el id suministrado por el usuario.
+      const idToFind = this.product.find(element => element.id === id);
+      // Si el id suministrado por el usuario existe, se devolverá un objeto con el producto deseado.
+      if (idToFind) {
+        // Eliminación de producto.
+        this.product.splice(id - 1, 1);
+        console.log(`Product with id number ${id} was succesfully deleted.`);
+      } else {
+        // Si no existe el arreglo, se notificará al usuario por medio de un error.
+        console.log(`There is no product with id ${id}`);
+      };
+    };
   };
 };
 
@@ -107,17 +142,13 @@ console.log(productList);
 
 // Probando método addProducto
 testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
-productList = testingProduct.getProducts();
 console.log("Devuelve arreglo con producto recién creado con id = 1.");
-console.log(productList);
-console.log("Se agrega un producto exactamente igual para probar que no el método addProducto no lo permite por tener el mismo code.");
-testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
-console.log("Se imprime nuevamente productList para demostrar que el arreglo no fue alterado.");
-console.log(productList);
-testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc456", 25);
-testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc789", 25);
-testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "def123", 25);
-testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "def456", 25);
+
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "ac123", 25);
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc23", 25);
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "bc123", 25);
+
+productList = testingProduct.getProducts();
 console.log(productList);
 
 // Probando método getProductById
@@ -127,8 +158,6 @@ productById = testingProduct.getProductById(2);
 // En caso de existir el id
 productById = testingProduct.getProductById(1);
 
-testingProduct.updateProduct(1, 'title', "123456789");
-testingProduct.updateProduct(5, 'stock', 40);
-testingProduct.deleteProduct(4);
-testingProduct.deleteProduct(2);
-console.log(productList);
+testingProduct.updateProduct(1, "ode", '1234567');
+
+testingProduct.deleteProduct(5);
