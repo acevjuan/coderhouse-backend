@@ -52,9 +52,22 @@ class ProductManager {
       };
     };
   };
+
+  // Actualiza información del producto indicada por el usuario proporcionando el id.
+  updateProduct(id) {
+    console.log("testing updateProduct method...");
+  };
+
+    // Elimina un producto del arreglo indicado por el usuario proporcionando el id.
+  deleteProduct(id) {
+    console.log("testing deleteProduct method...");
+    this.product.splice(id - 1, 1);
+  };
+
 };
 
 // Testing
+
 // Creando instancia de la clase ProductoManager
 const testingProduct = new ProductManager();
 
@@ -72,6 +85,10 @@ console.log("Se agrega un producto exactamente igual para probar que no el méto
 testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 25);
 console.log("Se imprime nuevamente productList para demostrar que el arreglo no fue alterado.");
 console.log(productList);
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc456", 25);
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc789", 25);
+testingProduct.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "def123", 25);
+console.log(productList);
 
 // Probando método getProductById
 let productById;
@@ -80,3 +97,7 @@ productById = testingProduct.getProductById(2);
 console.log(productById);
 // En caso de existir el id
 productById = testingProduct.getProductById(1);
+
+testingProduct.updateProduct(1);
+testingProduct.deleteProduct(4);
+console.log(productList);
