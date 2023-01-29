@@ -54,14 +54,19 @@ class ProductManager {
   };
 
   // Actualiza información del producto indicada por el usuario proporcionando el id.
-  updateProduct(id) {
-    console.log("testing updateProduct method...");
+  updateProduct(id, toUpdate, newValue) {
+    if (toUpdate === 'title' || toUpdate === 'description' || toUpdate === 'price' || toUpdate === 'thumbnail' || toUpdate === 'code' || toUpdate === 'stock') {
+      this.product[id - 1][toUpdate] = newValue;
+      console.log("Info was succesfully updated.");
+    } else {
+      console.log("Info to update do not exist.");
+    };
   };
 
     // Elimina un producto del arreglo indicado por el usuario proporcionando el id.
   deleteProduct(id) {
-    console.log("testing deleteProduct method...");
     this.product.splice(id - 1, 1);
+    console.log(`Product with id number ${id} was succesfully deleted.`);
   };
 
 };
@@ -98,6 +103,6 @@ console.log(productById);
 // En caso de existir el id
 productById = testingProduct.getProductById(1);
 
-testingProduct.updateProduct(1);
+testingProduct.updateProduct(1, 'description', "123456789");
 testingProduct.deleteProduct(4);
 console.log(productList);
