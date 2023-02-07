@@ -11,7 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 let dataBase;
 
 // Trayendo base de datos del archivo products.json.
-fs.readFile('../files/products.json', 'utf-8', (error, data) => {
+fs.readFile('./files/products.json', 'utf-8', (error, data) => {
 	if (error) {
 		console.log(`ERROR: ${error}`);
 		return;
