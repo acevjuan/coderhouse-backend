@@ -18,7 +18,7 @@ fs.readFile('../files/products.json', 'utf-8', (error, data) => {
 	}
 	const jsonData = JSON.parse(data);
 	dataBase = jsonData;
-})
+});
 
 // Endpoint para mostrar todos los prodcutos y filtrados por límite.
 app.get("/products", (request, response) => {
