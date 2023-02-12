@@ -47,7 +47,12 @@ router.get("/:pid", (request, response) => {
 
 router.post('/', (request, response) => {
   let product = {};
-  let productId = productsDb[productsDb.length - 1].id + 1;
+  let productId;
+  if (productsDb.length === 0) {
+    productId = 1;
+  } else {
+    productId = productsDb[productsDb.length - 1].id + 1;
+  };
   product = {id: productId, ...request.body};
   if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
     console.error('Not enough information.');
@@ -89,7 +94,8 @@ router.delete('/:pid', (request, response) => {
   if (!productExists) {
     return response.status(202).send({ status: 'info', error: 'error' });
   };
-  productsDb.splice(productId - 1, 1);
+  let productIndex = productsDb.findIndex(p => p.id === productId);
+  productsDb.splice(productIndex, 1);
   fs.writeFile('./files/products.json', JSON.stringify(productsDb), (err) => {
     console.log(err);
   });
