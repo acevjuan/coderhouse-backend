@@ -52,8 +52,8 @@ router.post('/', (request, response) => {
   } else {
     productId = productsDb[productsDb.length - 1].id + 1;
   };
-  product = {id: productId, ...request.body};
-  if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+  product = {id: productId, code: `abc${productId}`, ...request.body, thumbnails: []};
+  if (!product.id || !product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.category || !product.thumbnails) {
     console.error('Not enough information.');
     response.status(400).send({ status: 'Error', message: 'Not enough information.' });
   };
