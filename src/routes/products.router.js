@@ -1,7 +1,8 @@
-import { Router } from "express";
+import { Router, response } from "express";
 import * as fs from 'fs';
 
 import { ProductManager } from '../classes/ProductManager.js';
+import { request } from "http";
 
 const router = Router();
 
@@ -57,6 +58,29 @@ router.post('/', (request, response) => {
   fs.writeFile('./files/products.json', JSON.stringify(productsDb), (err) => {
     console.log(err);
   });
+});
+
+router.put('/:pid', (request, response) => {
+  let productId = parseInt(request.params.pid);
+  let productToUpdate = request.body;
+  if(productToUpdate.id) {
+    return response.send({ status: 'Error', message: 'id cannot be updated.' });
+  };
+  const productPosition = productsDb.findIndex((p => p.id === productId));
+  console.log(productId);
+  if (productPosition < 0) {
+    return response.status(202).send({ status: 'info', error: 'Usuario no encontrado' });
+  };
+  if (productToUpdate.title && productToUpdate.description && productToUpdate.price && productToUpdate.thumbnail && productToUpdate.code && productToUpdate.stock) {
+    productToUpdate.id = productsDb[productPosition].id;
+    productsDb[productPosition] = productToUpdate;
+    fs.writeFile('./files/products.json', JSON.stringify(productsDb), (err) => {
+      console.log(err);
+    });
+    return response.send({ status: 'Success!', message: 'Product updated'});
+  } else {
+    return response.status(202).send({ status: 'info', error: 'Not enough information.' });
+  }
 });
 
 export default router;
