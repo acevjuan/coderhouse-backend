@@ -1,10 +1,17 @@
+// Importando librerías Express JS y File System.
 import express from 'express';
 import * as fs from 'fs';
+
+//Importando routers de products y carts.
+import productsRouter from './routes/products.router.js';
+import cartsRouter from './routes/carts.router.js';
+
 import { ProductManager } from './ProductManager.js';
 
 // Incluyendo Express JS.
 const app = express();
 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // La variable dataBase almacenará la lista de productos que vendrá del products.json.
