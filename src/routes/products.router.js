@@ -44,4 +44,22 @@ router.get("/:pid", (request, response) => {
   };
 });
 
+router.post('/', (request, response) => {
+  let product = {};
+  let productId = productsDb.length;
+  if (productsDb[productsDb.length - 1].id === productId) {
+    productId = productId + 1;
+  }
+  product = {id: productId, ...request.body}
+  if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
+    console.error('Not enough information.');
+    response.status(400).send({ status: 'Error', message: 'Not enough information.' });
+  }
+  productsDb.push(product);
+  response.send({ status: 'Success!', message: 'Product created succesfully'} );
+  fs.writeFile('./files/products.json', JSON.stringify(productsDb), (err) => {
+    console.log(err);
+  });
+});
+
 export default router;
