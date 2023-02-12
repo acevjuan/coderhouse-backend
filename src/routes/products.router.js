@@ -1,8 +1,7 @@
-import { Router, response } from "express";
+import { Router } from "express";
 import * as fs from 'fs';
 
 import { ProductManager } from '../classes/ProductManager.js';
-import { request } from "http";
 
 const router = Router();
 

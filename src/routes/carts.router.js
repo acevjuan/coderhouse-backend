@@ -1,5 +1,6 @@
 import { Router } from "express";
 import * as fs from 'fs';
+import { request } from "http";
 
 const router = Router();
 
@@ -43,6 +44,16 @@ router.post('/', (request, response) => {
   });
   return response.send({ status: 'Success!', message: 'Cart created succesfully'} );
 });
+
+router.get('/:cid', (request, response) => {
+  let cartId = parseInt(request.params.cid);
+  let cart = cartsDb.find(c => c.id === cartId);
+  if (!cart) {
+    return response.send({ message: 'No existe el carrito' });
+  } else {
+    return response.send(cart);
+  }
+})
 
 router.post('/:cid/product/:pid', (request, response) => {
   let cartId = parseInt(request.params.cid);
