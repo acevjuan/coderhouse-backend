@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Llamando routers
-app.use('/products', productsRouter);
+app.use('/api/products', productsRouter);
 
 // Información del servidor.
 const SERVER_PORT = 8080;
