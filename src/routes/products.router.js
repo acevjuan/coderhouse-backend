@@ -90,6 +90,9 @@ router.delete('/:pid', (request, response) => {
     return response.status(202).send({ status: 'info', error: 'error' });
   };
   productsDb.splice(productId - 1, 1);
+  fs.writeFile('./files/products.json', JSON.stringify(productsDb), (err) => {
+    console.log(err);
+  });
   return response.send({ status: 'Success!', message: 'Product deleted'});
 })
 
