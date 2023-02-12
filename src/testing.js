@@ -1,4 +1,4 @@
-import { ProductManager } from './ProductManager.js';
+import { ProductManager } from './classes/ProductManager.js';
 
 const testingProduct = new ProductManager();
 
