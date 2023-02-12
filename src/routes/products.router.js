@@ -83,4 +83,14 @@ router.put('/:pid', (request, response) => {
   }
 });
 
+router.delete('/:pid', (request, response) => {
+  let productId = parseInt(request.params.pid);
+  let productExists = productsDb.find(p => p.id === productId);
+  if (!productExists) {
+    return response.status(202).send({ status: 'info', error: 'error' });
+  };
+  productsDb.splice(productId - 1, 1);
+  return response.send({ status: 'Success!', message: 'Product deleted'});
+})
+
 export default router;
