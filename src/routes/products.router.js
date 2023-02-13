@@ -53,12 +53,12 @@ router.post('/', (request, response) => {
     productId = productsDb[productsDb.length - 1].id + 1;
   };
   product = {id: productId, code: `abc${productId}`, ...request.body, thumbnails: []};
-  if (!product.id || !product.title || !product.description || !product.code || !product.price || !product.status || !product.stock || !product.category || !product.thumbnails) {
+  if (!product.id || !product.title || !product.description || !product.code || !product.price || product.status === undefined || !product.stock || !product.category || !product.thumbnails) {
     console.error('Not enough information.');
     response.status(400).send({ status: 'Error', message: 'Not enough information.' });
   };
   productsDb.push(product);
-  response.send({ status: 'Success!', message: 'Product created succesfully'} );
+  response.send({ status: 'Success', message: 'Product created succesfully', payload: product} );
   fs.writeFile('./files/products.json', JSON.stringify(productsDb), (err) => {
     console.log(err);
   });
