@@ -16,12 +16,12 @@ fs.readFile('./files/products.json', 'utf-8', (error, data) => {
 	productsDb = jsonData;
 });
 
-router.get('/realtimeproducts', (request, response) => {
-  response.render('realTimeProducts');
-});
-
 router.get('/', (request, response) => {
   response.render('index', { products: productsDb });
+});
+
+router.get('/realtimeproducts', (request, response) => {
+  response.render('realTimeProducts', { products: productsDb });
 });
 
 export default router;

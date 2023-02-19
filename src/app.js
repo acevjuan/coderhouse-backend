@@ -4,6 +4,7 @@ import __dirname from './utils.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routes/views.router.js';
 import { Server } from 'socket.io';
+import * as fs from 'fs';
 
 //Importando routers de products y carts.
 import productsRouter from './routes/products.router.js';
@@ -27,7 +28,6 @@ app.use('/', viewsRouter);
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
 app.use('/api/', viewsRouter);
-app.use('/api/', viewsRouter);
 
 // Información del servidor.
 const SERVER_PORT = 8080;
@@ -37,9 +37,23 @@ const httpServer = app.listen(SERVER_PORT, () => {
   console.log(`Listening server on port ${SERVER_PORT}`);
 });
 
+// La variable productsDb traerá y actualizará información en base de datos products.json.
+let productsDb;
+
+// Trayendo base de datos del archivo products.json.
+fs.readFile('./files/products.json', 'utf-8', (error, data) => {
+	if (error) {
+    console.log(`ERROR: ${error}`);
+    return;
+	}
+	const jsonData = JSON.parse(data);
+	productsDb = jsonData;
+});
+
 // Socket server
 const socketServer = new Server(httpServer);
 
 socketServer.on('connection', socket => {
   console.log('Nuevo cliente conectado');
+  socket.emit('products', productsDb);
 });
