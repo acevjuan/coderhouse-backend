@@ -1,10 +1,12 @@
 <div>
+  <h1>Listado de productos renderizado con Handlebars</h1>
   {{#each products}}
   <div>
-    <h2>Producto: {{this.title}}</h2>
-    <h3>No. id: {{this.id}}</h3>
-    <h3>Code: {{this.code}}</h3>
-    <h3>Precio: {{this.price}}</h3>
+    <h2>Title: {{this.title}}</h2>
+    <p>Code: {{this.code}}</p>
+    <p>Description: {{this.description}}</p>
+    <p>Price: {{this.price}}</p>
+    <p>Stock: {{this.stock}}</p>
   </div>
   {{/each}}
 </div>

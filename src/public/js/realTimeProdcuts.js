@@ -4,15 +4,19 @@ const container = document.querySelector('.container');
 
 socket.on('products', data => {
   console.log(data);
-  container.innerHTML = "";
+  container.innerHTML = `
+    <h1>Listado de productos con Websockets</h1>
+  `;
   data.forEach((element, index) => {
     let product = document.createElement('div');
     product.innerHTML = `
-    <div>
-      <h2>Title: ${element.title}</h2>
-      <h3>Product id: ${element.id}</h2>
-      <h3>Product code: ${element.code}</h2>
+    <div id="product-${element.id}" class="container__producto">
+      <h2 class"container__producto__title">Title: ${element.title}</h2>
+      <p class"container__producto__code">Code: ${element.code}</p>
+      <p class"container__producto__code">Description: ${element.description}</p>
+      <p class"container__producto__code">Price: ${element.price}</p>
+      <p class"container__producto__code">Stock: ${element.stock}</p>
     </div>`
   container.appendChild(product);
   });
-})
+});

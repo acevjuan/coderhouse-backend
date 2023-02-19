@@ -27,7 +27,7 @@ app.use('/', viewsRouter);
 // Llamando routers products y carts.
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
-app.use('/api/', viewsRouter);
+app.use('/', viewsRouter);
 
 // Información del servidor.
 const SERVER_PORT = 8080;
@@ -35,6 +35,7 @@ const SERVER_PORT = 8080;
 // Inicializando servidor.
 const httpServer = app.listen(SERVER_PORT, () => {
   console.log(`Listening server on port ${SERVER_PORT}`);
+  console.log(`Root path: ${__dirname}`);
 });
 
 // La variable productsDb traerá y actualizará información en base de datos products.json.
@@ -54,6 +55,6 @@ fs.readFile('./files/products.json', 'utf-8', (error, data) => {
 const socketServer = new Server(httpServer);
 
 socketServer.on('connection', socket => {
-  console.log('Nuevo cliente conectado');
+  console.log('Cliente conectado');
   socket.emit('products', productsDb);
 });
