@@ -1,3 +1,4 @@
+// Lado del cliente para renderización en tiempo real de listado de productos.
 const socket = io();
 
 const container = document.querySelector('.container');

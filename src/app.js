@@ -38,6 +38,9 @@ const httpServer = app.listen(SERVER_PORT, () => {
   console.log(`Root path: ${__dirname}`);
 });
 
+
+// Para esta entrega se decide traer la base de datos products.json al app.js para enviarla a servidor socket.io.
+
 // La variable productsDb traerá y actualizará información en base de datos products.json.
 let productsDb;
 
