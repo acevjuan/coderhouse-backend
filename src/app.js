@@ -26,7 +26,8 @@ app.use('/', viewsRouter);
 // Llamando routers products y carts.
 app.use('/api/products', productsRouter);
 app.use('/api/carts', cartsRouter);
-app.use('/api/realtimeproducts', viewsRouter);
+app.use('/api/', viewsRouter);
+app.use('/api/', viewsRouter);
 
 // Información del servidor.
 const SERVER_PORT = 8080;
